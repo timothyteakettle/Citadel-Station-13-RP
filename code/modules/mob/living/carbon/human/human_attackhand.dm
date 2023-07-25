@@ -67,8 +67,6 @@
 
 	switch(L.a_intent)
 		if(INTENT_HELP)
-			if (istype(H) && attempt_to_scoop(H))
-				return 0;
 			if(iscarbon(L) && attempt_cpr_interaction(L))
 				return TRUE
 			else if(!(L == src && apply_pressure(L, L.zone_sel.selecting)))
