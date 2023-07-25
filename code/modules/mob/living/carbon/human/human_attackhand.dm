@@ -294,6 +294,11 @@
 			visible_message("<font color='red'> <B>[L] attempted to disarm [src]!</B></font>")
 	return
 
+/mob/living/carbon/human/AltClickOn(atom/target)
+	if(ishuman(target) && attempt_to_scoop(target))
+		return TRUE
+	return FALSE
+
 /mob/living/carbon/human/proc/afterattack(atom/target, mob/user, clickchain_flags, list/params)
 	return
 
