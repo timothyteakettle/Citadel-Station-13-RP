@@ -18,4 +18,4 @@
 #define MAXIMUM_MARKINGS 30
 
 ///The maximum number of items you can have scanned for holographic display purposes
-#define MAXIMUM_SCANNED_HOLOGRAMS 10
+#define MAXIMUM_SCANNED_OBJECTS 10

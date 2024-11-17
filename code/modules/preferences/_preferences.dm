@@ -227,6 +227,10 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	/// Set character's suit sensor level.
 	var/sensorpref = 5
 
+	//* ##pAI Stuff
+	/// Stores a list of icons the pAI has scanned
+	var/list/scanned_objects = list()
+
 /datum/preferences/New(client/C)
 	if(istype(C))
 		client = C

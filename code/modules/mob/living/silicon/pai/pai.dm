@@ -340,7 +340,7 @@
 			to_chat(src, SPAN_NOTICE("You need to wait [((last_scanned_time+600) - world.time)/10] seconds to scan another object."))
 
 /mob/living/silicon/pai/proc/scan_object(var/atom/A, affix)
-	if(length(scanned_objects) > MAXIMUM_SCANNED_HOLOGRAMS)
+	if(length(scanned_objects) > MAXIMUM_SCANNED_OBJECTS)
 		to_chat(src, SPAN_NOTICE("Too many items loaded into memory. Please remove some items from memory to continue."))
 		return
 	var/icon/hologram_icon = render_hologram_icon(A, 210, TRUE, TRUE, "_[affix]")
@@ -494,7 +494,7 @@
 	if(scanned_item_to_show)
 		place_hologram(scanned_item_to_show)
 
-/mob/living/silicon/pai/procprompt_delete_scanned_object()
+/mob/living/silicon/pai/proc/prompt_delete_scanned_object()
 	if(length(active_holograms) == 0)
 		to_chat(src, SPAN_NOTICE("You have no scanned objects in memory."))
 		return

@@ -11,6 +11,10 @@
 	if(!preference_mob())
 		return
 
+	var/index = 0
+	for(index=0, index<MAXIMUM_SCANNED_OBJECTS, index++)
+		S["scanned_object_[index]"]	      >> pref.scanned_objects[index]
+
 	candidate.savefile_load(preference_mob())
 
 /datum/category_item/player_setup_item/player_global/pai/save_preferences(var/savefile/S)
@@ -19,6 +23,10 @@
 
 	if(!preference_mob())
 		return
+
+	var/index = 0
+	for(index=0, index<MAXIMUM_SCANNED_OBJECTS, index++)
+		S["scanned_object_[index]"]	      << pref.scanned_objects[index]
 
 	candidate.savefile_save(preference_mob())
 
