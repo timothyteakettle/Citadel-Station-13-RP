@@ -334,13 +334,16 @@
 	if((isobj(A) || ismob(A)) && in_range_of(src, A) && !istype(A, /obj/item/paicard) && !istype(A, /obj/effect/pai_hologram))
 		if(world.time > last_scanned_time + 600)
 			last_scanned_time = world.time
-			scan_object(A)
+			scan_object(A,"pai")
 			to_chat(src, "You scan the [A.name]")
 		else
 			to_chat(src, "You need to wait [((last_scanned_time+600) - world.time)/10] seconds to scan another object.")
 
-/mob/living/silicon/pai/proc/scan_object(var/atom/A)
-	var/icon/hologram_icon = render_hologram_icon(A, 210, TRUE, TRUE, "_pai")
+/mob/living/silicon/pai/proc/scan_object(var/atom/A, affix)
+	if(length(scanned_objects) > MAXIMUM_SCANNED_HOLOGRAMS)
+		to_chat(src, "Too many items loaded into memory. Please remove some items from memory to continue.")
+		return
+	var/icon/hologram_icon = render_hologram_icon(A, 210, TRUE, TRUE, "_[affix]")
 	var/hologram_width = hologram_icon.Width()
 	var/width_adjustment = (32 - hologram_width) / 2
 
@@ -350,10 +353,6 @@
 	I.pixel_x = width_adjustment
 	I.appearance_flags = RESET_TRANSFORM | KEEP_APART
 	scanned_objects[A.name] = I
-
-	// more than 10 items? remove the oldest object (index 0) in the list
-	if(length(scanned_objects) > 10)
-		scanned_objects.Cut(0, 1)
 
 /mob/living/silicon/pai/proc/get_holo_image()
 	return render_hologram_icon(usr.client.prefs.render_to_appearance(PREF_COPY_TO_FOR_RENDER | PREF_COPY_TO_NO_CHECK_SPECIES | PREF_COPY_TO_UNRESTRICTED_LOADOUT), 210)
