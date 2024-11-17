@@ -113,6 +113,13 @@
 
 	prompt_hologram_placement()
 
+/mob/living/silicon/pai/verb/delete_scanned_object()
+	set name = "Delete Scanned Object"
+	set category = "pAI Commands"
+	set desc = "Allows you to pick a scanned object to remove from memory."
+
+	prompt_delete_scanned_object()
+
 /mob/living/silicon/pai/verb/delete_holograms()
 	set name = "Delete All Holograms"
 	set category = "pAI Commands"

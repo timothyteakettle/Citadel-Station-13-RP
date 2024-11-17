@@ -337,11 +337,11 @@
 			scan_object(A,"pai")
 			to_chat(src, "You scan the [A.name]")
 		else
-			to_chat(src, "You need to wait [((last_scanned_time+600) - world.time)/10] seconds to scan another object.")
+			to_chat(src, SPAN_NOTICE("You need to wait [((last_scanned_time+600) - world.time)/10] seconds to scan another object."))
 
 /mob/living/silicon/pai/proc/scan_object(var/atom/A, affix)
 	if(length(scanned_objects) > MAXIMUM_SCANNED_HOLOGRAMS)
-		to_chat(src, "Too many items loaded into memory. Please remove some items from memory to continue.")
+		to_chat(src, SPAN_NOTICE("Too many items loaded into memory. Please remove some items from memory to continue."))
 		return
 	var/icon/hologram_icon = render_hologram_icon(A, 210, TRUE, TRUE, "_[affix]")
 	var/hologram_width = hologram_icon.Width()
@@ -493,6 +493,15 @@
 	var/scanned_item_to_show = tgui_input_list(usr, "Select Scanned Object", "Scanned Objects", scanned_objects)
 	if(scanned_item_to_show)
 		place_hologram(scanned_item_to_show)
+
+/mob/living/silicon/pai/procprompt_delete_scanned_object()
+	if(length(active_holograms) == 0)
+		to_chat(src, SPAN_NOTICE("You have no scanned objects in memory."))
+		return
+
+	var/scanned_item_to_show = tgui_input_list(usr, "Select Scanned Object", "Scanned Objects", scanned_objects)
+	if(scanned_item_to_show)
+		scanned_objects -= scanned_item_to_show
 
 /mob/living/silicon/pai/UnarmedAttack(var/atom/A, var/proximity_flag)
 	if(istype(A, /obj/effect/pai_hologram))
