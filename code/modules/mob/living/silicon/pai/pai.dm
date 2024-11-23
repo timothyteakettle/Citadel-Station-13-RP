@@ -118,7 +118,6 @@
 
 	var/icon/last_rendered_hologram_icon
 
-	var/list/scanned_objects = list()
 	var/last_scanned_time = 0
 
 	var/list/actions_to_grant = list(/datum/action/pai/toggle_fold,
@@ -340,7 +339,7 @@
 			to_chat(src, SPAN_NOTICE("You need to wait [((last_scanned_time+600) - world.time)/10] seconds to scan another object."))
 
 /mob/living/silicon/pai/proc/scan_object(var/atom/A, affix)
-	if(length(scanned_objects) > MAXIMUM_SCANNED_OBJECTS)
+	if(length(client.prefs.scanned_objects) > MAXIMUM_SCANNED_OBJECTS)
 		to_chat(src, SPAN_NOTICE("Too many items loaded into memory. Please remove some items from memory to continue."))
 		return
 	var/icon/hologram_icon = render_hologram_icon(A, 210, TRUE, TRUE, "_[affix]")
@@ -352,7 +351,8 @@
 	I.pixel_y = 30
 	I.pixel_x = width_adjustment
 	I.appearance_flags = RESET_TRANSFORM | KEEP_APART
-	scanned_objects[A.name] = I
+	I.name = A.name
+	client.prefs.scanned_objects[A.name] = I
 
 /mob/living/silicon/pai/proc/get_holo_image()
 	return render_hologram_icon(usr.client.prefs.render_to_appearance(PREF_COPY_TO_FOR_RENDER | PREF_COPY_TO_NO_CHECK_SPECIES | PREF_COPY_TO_UNRESTRICTED_LOADOUT), 210)
@@ -447,12 +447,12 @@
 
 /mob/living/silicon/pai/proc/card_hologram_display()
 	if(src.loc == card)
-		var/scanned_item_to_show = tgui_input_list(usr, "Select Scanned Object", "Scanned Objects", list("Cancel") + scanned_objects)
+		var/scanned_item_to_show = tgui_input_list(usr, "Select Scanned Object", "Scanned Objects", list("Cancel") + client.prefs.scanned_objects)
 		if(scanned_item_to_show)
 			if(scanned_item_to_show == "Cancel")
 				card.stop_displaying_hologram()
 			else
-				var/image/I = scanned_objects[scanned_item_to_show]
+				var/image/I = client.prefs.scanned_objects[scanned_item_to_show]
 				card.display_hologram_from_image(I)
 	else
 		to_chat(src, "You must be in card form to do this!")
@@ -473,7 +473,7 @@
 	active_holograms -= hologram
 
 /mob/living/silicon/pai/proc/place_hologram(var/scanned_object_name)
-	var/image/I = scanned_objects[scanned_object_name]
+	var/image/I = client.prefs.scanned_objects[scanned_object_name]
 	var/obj/effect/pai_hologram/hologram = new(get_turf(src))
 	hologram.icon = I
 	hologram.name = scanned_object_name
@@ -490,7 +490,7 @@
 		to_chat(src, SPAN_NOTICE("You cannot have more than [MAX_HOLOGRAMS] holograms active!"))
 		return
 
-	var/scanned_item_to_show = tgui_input_list(usr, "Select Scanned Object", "Scanned Objects", scanned_objects)
+	var/scanned_item_to_show = tgui_input_list(usr, "Select Scanned Object", "Scanned Objects", client.prefs.scanned_objects)
 	if(scanned_item_to_show)
 		place_hologram(scanned_item_to_show)
 
@@ -499,9 +499,9 @@
 		to_chat(src, SPAN_NOTICE("You have no scanned objects in memory."))
 		return
 
-	var/scanned_item_to_show = tgui_input_list(usr, "Select Scanned Object", "Scanned Objects", scanned_objects)
+	var/scanned_item_to_show = tgui_input_list(usr, "Select Scanned Object", "Scanned Objects", client.prefs.scanned_objects)
 	if(scanned_item_to_show)
-		scanned_objects -= scanned_item_to_show
+		client.prefs.scanned_objects -= scanned_item_to_show
 
 /mob/living/silicon/pai/UnarmedAttack(var/atom/A, var/proximity_flag)
 	if(istype(A, /obj/effect/pai_hologram))

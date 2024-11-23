@@ -11,6 +11,11 @@
 	sort_order = 1
 
 /datum/category_item/player_setup_item/general/basic/load_character(var/savefile/S)
+	var/index = 0
+	for(index=0, index<MAXIMUM_SCANNED_OBJECTS, index++)
+		if(S["scanned_object_[index]"])
+			message_admins("trying to load item at index [index] called [S["scanned_object_[index]"]]")
+			S["scanned_object_[index]"]	      >> pref.scanned_objects[S["scanned_object_[index]"].name]
 	S["real_name"]				>> pref.real_name
 	S["nickname"]				>> pref.nickname
 	S["name_is_always_random"]	>> pref.be_random_name
@@ -24,6 +29,11 @@
 	S["Ref_Toggle"]				>> pref.full_ref_toggle
 
 /datum/category_item/player_setup_item/general/basic/save_character(var/savefile/S)
+	var/index = 0
+	for(var/scanned_object in pref.scanned_objects)
+		index = index + 1
+		message_admins("saving item at index [index] called [scanned_object]")
+		S["scanned_object_[index]"]	      << pref.scanned_objects[scanned_object].name
 	S["real_name"]				<< pref.real_name
 	S["nickname"]				<< pref.nickname
 	S["name_is_always_random"]	<< pref.be_random_name
