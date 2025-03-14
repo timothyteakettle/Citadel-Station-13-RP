@@ -170,3 +170,6 @@
 	var/language_name = message_args["language_name"]
 	var/language_flags = message_args["language_flags"]
 	message_args["message"] = hologram.handle_autohiss(message, language_name, language_flags, TRUE)
+
+/mob/living/simple_mob/holosphere_shell/isSynthetic()
+	return TRUE
