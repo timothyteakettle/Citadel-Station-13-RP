@@ -195,11 +195,6 @@
 /datum/species/shapeshifter/holosphere/get_bodytype_legacy()
 	return base_species
 
-/datum/species/shapeshifter/holosphere/get_worn_legacy_bodytype()
-	var/datum/species/real = SScharacters.resolve_species_name(base_species)
-	// infinite loop guard
-	return istype(real, src)? base_species : real.get_worn_legacy_bodytype()
-
 /datum/species/shapeshifter/holosphere/get_race_key(mob/living/carbon/human/H)
 	var/datum/species/real = SScharacters.resolve_species_name(base_species)
 	return real.real_race_key(H)
