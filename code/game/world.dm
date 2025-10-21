@@ -92,8 +92,6 @@ GLOBAL_LIST(topic_status_cache)
 	// if(config && Configuration.get_entry(/datum/toml_config_entry/backend/logging/toggles/runtime))
 	// 	log = file("data/logs/runtime/[time2text(world.realtime,"YYYY-MM-DD-(hh-mm-ss)")]-runtime.log")
 
-	GLOB.timezoneOffset = get_timezone_offset()
-
 	callHook("startup")
 	//Emergency Fix
 	load_mods()
@@ -252,7 +250,7 @@ GLOBAL_LIST(topic_status_cache)
 
 /**
  * byond reboot proc
- * 
+ *
  * @params
  * * reason - this will be non-0 if initiated via byond admin tooling. we will always block this if a 'usr' exists and we are not OOM'd,
  *            as we want to force admin verb usage
@@ -317,7 +315,7 @@ GLOBAL_LIST(topic_status_cache)
 		call_ext(debug_server, "auxtools_shutdown")()
 	. = ..()
 
-/hook/startup/proc/loadMode()
+/legacy_hook/startup/proc/loadMode()
 	world.load_mode()
 	return 1
 
@@ -337,7 +335,7 @@ GLOBAL_LIST(topic_status_cache)
 	fdel(F)
 	F << the_mode
 
-/hook/startup/proc/loadMods()
+/legacy_hook/startup/proc/loadMods()
 	world.load_mods()
 	world.load_mentors() // no need to write another hook.
 	return 1
