@@ -131,7 +131,7 @@
 	var/actively_healing = TRUE
 	heal_rate = 1 // this is pretty high but they have 20 health and it costs nutrition to heal
 
-	var/heal_nutrition_multiplier = 10 // 10 nutrition per hp healed
+	var/heal_nutrition_multiplier = 5 // 5 nutrition per hp healed
 
 	var/last_death_time
 
