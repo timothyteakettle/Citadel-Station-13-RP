@@ -10,3 +10,9 @@
 	binded_variable.category = category
 
 	GLOB.admin_edit_directory[type].admin_edit_variables[variable_name] = binded_variable
+
+/proc/get_admin_edit_type(atom/A)
+	for(var/type in GLOB.admin_edit_directory)
+		if(istype(A, type))
+			return GLOB.admin_edit_directory[type]
+	return null
