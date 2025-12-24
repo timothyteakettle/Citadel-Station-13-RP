@@ -1,0 +1,3 @@
+#define VARIABLE_DATATYPE_NUMBER "Number"
+#define VARIABLE_DATATYPE_TEXT	 "Text"
+#define VARIABLE_DATATYPE_ICON	 "Icon"
