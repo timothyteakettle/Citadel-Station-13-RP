@@ -1610,6 +1610,8 @@ Note that amputating the affected organ does in fact remove the infection from t
 	var/datum/robolimb/R = get_robolimb_from_company(company)
 	force_icon = R.icon
 	model = company
+	name = initial(name)
+	desc = initial(desc)
 	get_icon()
 	if(owner)
 		owner.update_icons_body()
