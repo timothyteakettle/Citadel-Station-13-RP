@@ -1166,12 +1166,6 @@ Note that amputating the affected organ does in fact remove the infection from t
 
 /obj/item/organ/external/robotize(var/company, var/skip_prosthetics = 0, var/keep_organs = 0, force)
 		//* SHITCODE ALERT: REFACTOR ORGANS ASAP; FORCE IS JUST SO PREFS WORK
-
-	// BODYPART_VISUAL_ROBOTIC means we apply the force_icon but don't actually treat the limb as robotic
-	if(behaviour_flags & BODYPART_VISUAL_ROBOTIC)
-		robotize_icon_only(company)
-		return
-
 	if(robotic >= ORGAN_ROBOT && !force)
 		return
 
@@ -1604,14 +1598,3 @@ Note that amputating the affected organ does in fact remove the infection from t
 	if(!R || (species && (species.name in R.species_cannot_use)))
 		R = GLOB.basic_robolimb
 	return R
-
-/// Applies the 'force icon' for a prosthetic without actually making that limb robotic
-/obj/item/organ/external/proc/robotize_icon_only(var/company)
-	var/datum/robolimb/R = get_robolimb_from_company(company)
-	force_icon = R.icon
-	model = company
-	name = initial(name)
-	desc = initial(desc)
-	get_icon()
-	if(owner)
-		owner.update_icons_body()
