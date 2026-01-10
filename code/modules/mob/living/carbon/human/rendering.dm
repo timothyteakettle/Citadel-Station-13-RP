@@ -529,7 +529,7 @@
 			for(var/M in part.markings)
 				icon_key += "[M][part.markings[M]["color"]]"
 
-			if(part.robotic >= ORGAN_ROBOT || part.model)
+			if(part.robotic >= ORGAN_ROBOT)
 				icon_key += "2[part.model ? "-[part.model]": ""]"
 				robolimb_count++
 				if((part.robotic == ORGAN_ROBOT || part.robotic == ORGAN_LIFELIKE || part.robotic == ORGAN_NANOFORM) && (part.organ_tag == BP_HEAD || part.organ_tag == BP_TORSO || part.organ_tag == BP_GROIN))
