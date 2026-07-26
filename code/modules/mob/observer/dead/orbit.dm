@@ -80,8 +80,7 @@ GLOBAL_DATUM_INIT(orbit_menu, /datum/orbit_menu, new)
 			continue
 
 		var/name = mob_poi.real_name || mob_poi.name
-		if(ishuman(mobthing))
-			message_admins("TRANSFORM COMPONENT IS [transform_component] FOR MOB [mob_poi]")
+
 		if(is_dead)
 			if(isobserver(mob_poi))
 				name += " \[ghost\]"
