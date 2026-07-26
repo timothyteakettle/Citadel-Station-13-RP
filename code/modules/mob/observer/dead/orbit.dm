@@ -80,7 +80,6 @@ GLOBAL_DATUM_INIT(orbit_menu, /datum/orbit_menu, new)
 			continue
 
 		var/name = mob_poi.real_name || mob_poi.name
-
 		if(is_dead)
 			if(isobserver(mob_poi))
 				name += " \[ghost\]"
