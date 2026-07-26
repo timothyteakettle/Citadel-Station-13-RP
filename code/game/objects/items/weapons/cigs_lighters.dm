@@ -338,6 +338,13 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	type_butt = /obj/item/cigbutt/herbal
 	nicotine_amt = 0
 
+/obj/item/clothing/mask/smokable/cigarette/kaiju
+	desc = "The black paper smells pleasantly sweet."
+	icon_state = "cigkaiju"
+	item_state = "cigkaiju"
+	type_butt = /obj/item/cigbutt/kaiju
+	nicotine_amt = 1
+
 ////////////
 // CIGARS //
 ////////////
@@ -426,6 +433,9 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 
 /obj/item/cigbutt/herbal
 	icon_state = "cigherbalbutt"
+
+/obj/item/cigbutt/kaiju
+	icon_state = "cigkaijubutt"
 
 /////////////////
 //SMOKING PIPES//
@@ -587,6 +597,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	w_class = WEIGHT_CLASS_TINY
 	throw_force = 4
 	suit_storage_class = SUIT_STORAGE_CLASS_SOFTWEAR
+	belt_storage_class = BELT_CLASS_SMALL
 	slot_flags = SLOT_BELT
 	attack_verb = list("burnt", "singed")
 	var/base_state

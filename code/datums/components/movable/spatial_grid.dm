@@ -1,5 +1,5 @@
 //* This file is explicitly licensed under the MIT license. *//
-//* Copyright (c) 2024 silicons                             *//
+//* Copyright (c) 2024 Citadel Station Developers           *//
 
 /**
  * registers a /movable in a spatial grid
@@ -27,12 +27,10 @@
 	src.grid_width = grid.width
 
 /datum/component/spatial_grid/RegisterWithParent()
-	. = ..()
 	construct()
 
 /datum/component/spatial_grid/UnregisterFromParent()
 	teardown()
-	return ..()
 
 /datum/component/spatial_grid/CheckDupeComponent(datum/component/C, datum/spatial_grid/grid)
 	return grid != src.grid

@@ -15,6 +15,7 @@ GLOBAL_LIST_INIT(multiz_hole_baseturfs, typecacheof(list(
 /turf/proc/empty(turf_type=/turf/space, baseturf_type, list/ignore_typecache, flags)
 	// Remove all atoms except observers, landmarks, docking ports
 	// TODO: this likely should throw out landmarks as well as shuttle landmarks.
+	// TODO: just check ATOM_NONWORLD & ATOM_ABSTRACT maybe?
 	var/static/list/ignored_atoms = typecacheof(list(/mob/observer, /obj/landmark, /atom/movable/lighting_overlay, /obj/effect/shuttle_landmark))
 	var/list/allowed_contents = typecache_filter_list_reverse(get_all_contents_ignoring(ignore_typecache), ignored_atoms)
 	allowed_contents -= src
@@ -125,6 +126,9 @@ GLOBAL_LIST_INIT(multiz_hole_baseturfs, typecacheof(list(
 	var/old_outdoors = outdoors
 	var/old_dangerous_objects = dangerous_objects
 
+	var/old_bp = blueprint_data
+	blueprint_data = null
+
 	// prep for change
 	var/list/old_baseturfs = baseturfs
 	var/old_type = type
@@ -180,6 +184,8 @@ GLOBAL_LIST_INIT(multiz_hole_baseturfs, typecacheof(list(
 	if(old_fire)
 		fire = old_fire
 	queue_zone_update()
+
+	new_turf.blueprint_data = old_bp
 
 	// restore lighting
 	new_turf.ao_junction = old_ao_junction

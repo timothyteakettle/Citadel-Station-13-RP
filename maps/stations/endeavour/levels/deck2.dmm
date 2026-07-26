@@ -987,10 +987,7 @@
 /obj/effect/floor_decal/corner/lightorange/border{
 	dir = 4
 	},
-/obj/machinery/power/apc/west_mount{
-	pixel_x = 22;
-	dir = 8
-	},
+/obj/machinery/power/apc/west_mount,
 /obj/structure/cable/green{
 	icon_state = "0-8"
 	},
@@ -1085,6 +1082,11 @@
 "aLW" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/effect/floor_decal/corner/paleblue/diagonal,
+/obj/item/radio/intercom{
+	dir = 4;
+	name = "Station Intercom (General)";
+	pixel_x = 23
+	},
 /turf/simulated/floor/tiled/white,
 /area/medical/patient_b)
 "aMv" = (
@@ -1363,10 +1365,7 @@
 /turf/simulated/floor/tiled,
 /area/hallway/d2afthall/endeavour)
 "aZT" = (
-/obj/machinery/power/apc/west_mount{
-	dir = 8;
-	pixel_x = 22
-	},
+/obj/machinery/power/apc/west_mount,
 /obj/structure/cable/green{
 	icon_state = "0-8"
 	},
@@ -10210,6 +10209,10 @@
 "gWI" = (
 /obj/item/bedsheet/medical,
 /obj/structure/bed/padded,
+/obj/item/radio/intercom/department/medbay{
+	pixel_y = -23;
+	pixel_x = 0
+	},
 /turf/simulated/floor/carpet/tealcarpet,
 /area/medical/patient_b)
 "gWJ" = (
@@ -10538,15 +10541,6 @@
 /obj/structure/table/carbon/reinforced,
 /turf/simulated/floor/tiled/dark,
 /area/assembly/robotics/surgery)
-"hkW" = (
-/obj/structure/catwalk,
-/obj/machinery/door/firedoor{
-	dir = 8
-	},
-/obj/map_helper/access_helper/airlock/station/medical/department,
-/obj/machinery/door/airlock/maintenance,
-/turf/simulated/floor/plating,
-/area/station/medical/cmo_dorm/endeavour)
 "hkY" = (
 /obj/machinery/camera/network/civilian,
 /turf/simulated/floor/tiled/techfloor/grid,
@@ -11532,12 +11526,12 @@
 /area/medical/psych_ward)
 "hXy" = (
 /obj/machinery/door/firedoor/glass,
-/obj/machinery/door/airlock/maintenance/medical{
-	name = "Restroom";
+/obj/effect/floor_decal/spline/fancy/wood,
+/obj/machinery/door/airlock/command{
+	name = "CMO's Quarters";
 	req_one_access = null
 	},
-/obj/map_helper/access_helper/airlock/station/medical/department,
-/obj/effect/floor_decal/spline/fancy/wood,
+/obj/map_helper/access_helper/airlock/station/head_office/chief_medical_officer,
 /turf/simulated/floor/wood,
 /area/station/medical/cmo_dorm/endeavour)
 "hXW" = (
@@ -12262,6 +12256,11 @@
 "iyC" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/effect/floor_decal/corner/paleblue/diagonal,
+/obj/item/radio/intercom{
+	dir = 4;
+	name = "Station Intercom (General)";
+	pixel_x = 23
+	},
 /turf/simulated/floor/tiled/white,
 /area/medical/patient_a)
 "iyI" = (
@@ -12332,12 +12331,7 @@
 /obj/effect/floor_decal/corner/beige/bordercorner2{
 	dir = 1
 	},
-/obj/machinery/power/apc/west_mount{
-	cell_type = /obj/item/cell/super;
-	dir = 2;
-	pixel_x = 0;
-	pixel_y = 21
-	},
+/obj/machinery/power/apc/west_mount,
 /obj/structure/cable/green{
 	icon_state = "0-4"
 	},
@@ -12823,11 +12817,7 @@
 /obj/machinery/atmospherics/pipe/simple/hidden/supply{
 	dir = 4
 	},
-/obj/machinery/power/apc/west_mount{
-	pixel_x = 0;
-	pixel_y = 22;
-	dir = 2
-	},
+/obj/machinery/power/apc/west_mount,
 /obj/structure/cable/green{
 	icon_state = "0-8"
 	},
@@ -13650,7 +13640,7 @@
 /turf/simulated/floor/wood/sif/indoors,
 /area/medical/reception)
 "jyA" = (
-/obj/machinery/transhuman/synthprinter,
+/obj/machinery/resleeving/body_printer/synth_fab,
 /obj/machinery/camera/network/research{
 	dir = 8;
 	network = list("Research","Toxins  Test  Area")
@@ -13872,7 +13862,8 @@
 "jGo" = (
 /obj/structure/table/steel,
 /obj/machinery/recharger,
-/obj/item/cell/device/weapon,
+/obj/item/cell/basic/tier_1/small,
+/obj/item/cell/basic/tier_1/weapon,
 /turf/simulated/floor/tiled/techfloor,
 /area/rnd/workshop)
 "jHd" = (
@@ -15995,12 +15986,7 @@
 /turf/simulated/floor/plating,
 /area/hallway/d2amidportmaint/endeavour)
 "lnu" = (
-/obj/machinery/power/apc/west_mount{
-	cell_type = /obj/item/cell/super;
-	dir = 2;
-	pixel_x = 0;
-	pixel_y = 21
-	},
+/obj/machinery/power/apc/west_mount,
 /obj/structure/cable/green{
 	icon_state = "0-2"
 	},
@@ -16216,12 +16202,7 @@
 /turf/simulated/floor/tiled/white,
 /area/medical/patient_wing)
 "luU" = (
-/obj/machinery/power/apc/west_mount{
-	cell_type = /obj/item/cell/super;
-	dir = 2;
-	pixel_x = 0;
-	pixel_y = 21
-	},
+/obj/machinery/power/apc/west_mount,
 /obj/structure/cable/green{
 	icon_state = "0-4"
 	},
@@ -16760,12 +16741,7 @@
 /turf/simulated/floor/tiled/techfloor,
 /area/assembly/robotics)
 "lOB" = (
-/obj/machinery/power/apc/west_mount{
-	cell_type = /obj/item/cell/super;
-	dir = 2;
-	pixel_x = 0;
-	pixel_y = 21
-	},
+/obj/machinery/power/apc/west_mount,
 /obj/structure/cable/green{
 	icon_state = "0-2"
 	},
@@ -18306,6 +18282,10 @@
 "mKO" = (
 /obj/item/bedsheet/medical,
 /obj/structure/bed/padded,
+/obj/item/radio/intercom/department/medbay{
+	pixel_y = -23;
+	pixel_x = 0
+	},
 /turf/simulated/floor/carpet/tealcarpet,
 /area/medical/patient_c)
 "mLh" = (
@@ -19491,6 +19471,10 @@
 "nJs" = (
 /obj/item/bedsheet/medical,
 /obj/structure/bed/padded,
+/obj/item/radio/intercom/department/medbay{
+	pixel_y = -23;
+	pixel_x = 0
+	},
 /turf/simulated/floor/carpet/tealcarpet,
 /area/medical/patient_d)
 "nKi" = (
@@ -22715,7 +22699,6 @@
 /area/medical/medbay4)
 "pUT" = (
 /obj/structure/closet/secure_closet/CMO,
-/obj/item/cmo_disk_holder,
 /obj/item/flashlight/pen,
 /obj/item/storage/belt/medical,
 /obj/item/clothing/glasses/hud/health,
@@ -23270,11 +23253,7 @@
 /obj/machinery/atmospherics/pipe/manifold/hidden/supply{
 	dir = 1
 	},
-/obj/machinery/power/apc/west_mount{
-	pixel_x = 0;
-	pixel_y = 22;
-	dir = 2
-	},
+/obj/machinery/power/apc/west_mount,
 /obj/structure/cable/green{
 	icon_state = "2-4"
 	},
@@ -23301,6 +23280,10 @@
 "qna" = (
 /obj/item/bedsheet/medical,
 /obj/structure/bed/padded,
+/obj/item/radio/intercom/department/medbay{
+	pixel_y = -23;
+	pixel_x = 0
+	},
 /turf/simulated/floor/carpet/tealcarpet,
 /area/medical/patient_a)
 "qnh" = (
@@ -24657,12 +24640,7 @@
 /obj/structure/cable/green{
 	icon_state = "0-8"
 	},
-/obj/machinery/power/apc/west_mount{
-	cell_type = /obj/item/cell/super;
-	dir = 2;
-	pixel_x = 0;
-	pixel_y = 21
-	},
+/obj/machinery/power/apc/west_mount,
 /turf/simulated/floor/plating,
 /area/hallway/d2fwdmaint/endeavour)
 "rnt" = (
@@ -26183,6 +26161,11 @@
 "syJ" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/effect/floor_decal/corner/paleblue/diagonal,
+/obj/item/radio/intercom{
+	dir = 4;
+	name = "Station Intercom (General)";
+	pixel_x = 23
+	},
 /turf/simulated/floor/tiled/white,
 /area/medical/patient_c)
 "szg" = (
@@ -26380,10 +26363,7 @@
 /turf/simulated/floor/plating,
 /area/hallway/d2amidportmaint/endeavour)
 "sIX" = (
-/obj/machinery/power/apc/east_mount{
-	pixel_x = -22;
-	dir = 4
-	},
+/obj/machinery/power/apc/east_mount,
 /obj/structure/cable/green{
 	icon_state = "0-4"
 	},
@@ -27739,7 +27719,7 @@
 /turf/simulated/floor/plating,
 /area/hallway/d2amidportmaint/endeavour)
 "tAO" = (
-/obj/machinery/computer/transhuman/resleeving{
+/obj/machinery/computer/resleeving{
 	dir = 8
 	},
 /turf/simulated/floor/tiled,
@@ -29075,6 +29055,11 @@
 "uAQ" = (
 /obj/machinery/atmospherics/pipe/simple/hidden/scrubbers,
 /obj/effect/floor_decal/corner/paleblue/diagonal,
+/obj/item/radio/intercom{
+	dir = 8;
+	name = "Station Intercom (General)";
+	pixel_x = -24
+	},
 /turf/simulated/floor/tiled/white,
 /area/medical/patient_d)
 "uBa" = (
@@ -30640,7 +30625,7 @@
 /turf/simulated/floor/tiled/white,
 /area/medical/patient_d)
 "vMB" = (
-/obj/machinery/transhuman/resleever,
+/obj/machinery/resleeving/resleeving_pod,
 /obj/effect/floor_decal/industrial/outline/blue,
 /obj/machinery/light{
 	dir = 1
@@ -31259,7 +31244,7 @@
 /turf/simulated/floor/tiled/white,
 /area/medical/surgery)
 "whs" = (
-/obj/machinery/computer/transhuman/resleeving{
+/obj/machinery/computer/resleeving{
 	dir = 8
 	},
 /obj/effect/floor_decal/borderfloor{
@@ -31459,7 +31444,7 @@
 /turf/simulated/floor/tiled/white,
 /area/medical/medbay3)
 "wnk" = (
-/obj/machinery/clonepod/transhuman,
+/obj/machinery/resleeving/body_printer/grower_pod,
 /obj/effect/floor_decal/industrial/outline/blue,
 /turf/simulated/floor/tiled,
 /area/medical/resleeving)
@@ -32349,8 +32334,8 @@
 /obj/structure/cable/green{
 	icon_state = "4-8"
 	},
-/obj/machinery/door/airlock/medical{
-	name = "CMO Dormitory";
+/obj/machinery/door/airlock/command{
+	name = "CMO's Quarters";
 	req_one_access = null
 	},
 /turf/simulated/floor/wood,
@@ -33305,7 +33290,7 @@
 /obj/effect/floor_decal/corner/mauve/bordercorner2{
 	dir = 6
 	},
-/obj/machinery/transhuman/resleever,
+/obj/machinery/resleeving/resleeving_pod,
 /turf/simulated/floor/tiled/techfloor,
 /area/assembly/robotics)
 "xvN" = (
@@ -47737,7 +47722,7 @@ hXy
 snQ
 snQ
 aeC
-hkW
+pOy
 bjs
 bjs
 dcZ

@@ -68,6 +68,8 @@
 	//? Movespeed
 	/// Next world.time we will be able to move.
 	var/move_delay = 0
+	/// Next world.time we should allow a self-turn
+	var/turn_delay = 2
 	/// Last world.time we finished a normal, non relay/intercepted move
 	var/last_self_move = 0
 	/// Last world.time we turned in our spot without moving (see: facing directions)
@@ -98,9 +100,8 @@
 	var/list/datum/ability/abilities
 
 	//* Inventory *//
-	/// our inventory datum, if any.
-	var/datum/inventory/inventory
 	/// active hand index - null or num. must always be in range of held_items indices!
+	/// * 1 is left, 2 is right, etc
 	var/active_hand
 
 	//* IFF *//
@@ -144,8 +145,6 @@
 	var/ssd_visible = FALSE
 
 	//? unsorted / legacy
-	var/datum/mind/mind
-
 	var/next_move = null // For click delay, despite the misleading name.
 
 	var/atom/movable/screen/hands = null
@@ -423,3 +422,5 @@
 
 	///List of progress bars this mob is currently seeing for actions
 	var/list/progressbars = null //for stacking do_after bars
+
+	var/interaction_range = 0 //how far a mob has to be to interact with something without caring about obsctruction, defaulted to 0 tiles

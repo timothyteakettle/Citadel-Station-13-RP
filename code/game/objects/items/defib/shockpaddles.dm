@@ -107,8 +107,8 @@
 /obj/item/shockpaddles/proc/check_contact(mob/living/carbon/human/H)
 	if(!combat)
 		for(var/obj/item/clothing/cloth in H.inventory.get_slots_unsafe(
-			/datum/inventory_slot/inventory/uniform,
-			/datum/inventory_slot/inventory/suit,
+			/datum/inventory_slot/inventory/uniform::id,
+			/datum/inventory_slot/inventory/suit::id,
 		))
 			if((cloth.body_cover_flags & UPPER_TORSO) && (cloth.clothing_flags & CLOTHING_THICK_MATERIAL))
 				return FALSE
@@ -369,10 +369,12 @@
 		return ITEM_RELOCATED_BY_DROPPED
 
 /obj/item/shockpaddles/linked/check_charge(var/charge_amt)
-	return (base_unit.bcell && base_unit.bcell.check_charge(charge_amt))
+	var/obj/item/cell/bcell = base_unit.get_cell()
+	return (bcell && bcell.check_charge(charge_amt))
 
 /obj/item/shockpaddles/linked/checked_use(var/charge_amt)
-	return (base_unit.bcell && base_unit.bcell.checked_use(charge_amt))
+	var/obj/item/cell/bcell = base_unit.get_cell()
+	return (bcell && bcell.checked_use(charge_amt))
 
 /obj/item/shockpaddles/linked/make_announcement(var/message, var/msg_class)
 	base_unit.audible_message("<b>\The [base_unit]</b> [message]", "\The [base_unit] vibrates slightly.")

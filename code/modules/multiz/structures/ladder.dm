@@ -19,7 +19,7 @@
 	. = ..()
 	// the upper will connect to the lower
 	if(allowed_directions & DOWN) //we only want to do the top one, as it will initialize the ones before it.
-		for(var/obj/structure/ladder/L in get_vertical_step(src, DOWN))
+		for(var/obj/structure/ladder/L in get_step_multiz(src, DOWN))
 			if(L.allowed_directions & UP)
 				target_down = L
 				L.target_up = src
@@ -66,9 +66,6 @@
 	if(target_ladder)
 		M.locationTransitForceMove(get_turf(target_ladder), 1, allow_buckled = TRUE, allow_pulled = FALSE, allow_grabbed = TRUE)
 
-/obj/structure/ladder/attack_robot(var/mob/M)
-	attack_hand(M)
-
 /obj/structure/ladder/proc/getTargetLadder(var/mob/M)
 	if((!target_up && !target_down) || (target_up && !istype(target_up.loc, /turf) || (target_down && !istype(target_down.loc,/turf))))
 		to_chat(M, "<span class='notice'>\The [src] is incomplete and can't be climbed.</span>")
@@ -96,6 +93,9 @@
 		return FALSE
 	if(incapacitated())
 		to_chat(src, "<span class='warning'>You are physically unable to climb \the [ladder].</span>")
+		return FALSE
+	if(is_buckled())
+		to_chat(src, "<spab class='warning'>You can't do this while buckled to \the [buckled]!</span>")
 		return FALSE
 	return TRUE
 
@@ -235,7 +235,7 @@
 	var/obj/structure/ladder_assembly/above
 
 	for(var/direction in list(DOWN, UP))
-		var/turf/T = get_vertical_step(src, direction)
+		var/turf/T = get_step_multiz(src, direction)
 		if(!T) continue
 		var/obj/structure/ladder_assembly/LA = locate(/obj/structure/ladder_assembly, T)
 		if(!LA) continue

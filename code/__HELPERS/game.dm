@@ -12,8 +12,6 @@
 		max_z = max(z, max_z)
 	for(var/z in (LEGACY_MAP_DATUM).admin_levels)
 		max_z = max(z, max_z)
-	for(var/z in (LEGACY_MAP_DATUM).player_levels)
-		max_z = max(z, max_z)
 	return max_z
 
 /proc/get_area(atom/A)
@@ -89,9 +87,6 @@
 
 /proc/isNotStationLevel(level)
 	return !isStationLevel(level)
-
-/proc/isPlayerLevel(level)
-	return level in (LEGACY_MAP_DATUM).player_levels
 
 /proc/isAdminLevel(level)
 	return level in (LEGACY_MAP_DATUM).admin_levels
@@ -251,7 +246,7 @@
 				var/datum/robot_component/CO = borg.get_component("radio")
 				if(!CO)
 					continue //No radio component (Shouldn't happen)
-				if(!borg.is_component_functioning("radio") || !borg.cell_use_power(CO.active_usage))
+				if(!borg.is_component_functioning("radio") || !borg.legacy_cell_use_power(CO.active_usage))
 					continue //No power.
 
 			var/turf/speaker = get_turf(R)
@@ -568,8 +563,8 @@
 	return hear
 
 ///Get active players who are playing in the round
-/proc/get_active_player_count(alive_check = FALSE, afk_check = FALSE, human_check = FALSE)
-	var/active_players = 0
+/proc/get_active_player_list(alive_check = FALSE, afk_check = FALSE, human_check = FALSE)
+	var/list/active_players = list()
 	for(var/mob/player_mob as anything in GLOB.player_list)
 		if(!player_mob?.client)
 			continue
@@ -582,8 +577,12 @@
 		if(isnewplayer(player_mob)) // exclude people in the lobby
 			continue
 		if(isobserver(player_mob)) // Ghosts are fine if they were playing once (didn't start as observers)
-			// var/mob/observer/dead/ghost_player = player_mob
-			// if(ghost_player.started_as_observer) // Exclude people who started as observers
-			continue
-		active_players++
+			var/mob/observer/dead/ghost_player = player_mob
+			if(ghost_player.started_as_observer) // Exclude people who started as observers
+				continue
+		active_players += player_mob
 	return active_players
+
+///Counts active players who are playing in the round
+/proc/get_active_player_count(alive_check = FALSE, afk_check = FALSE, human_check = FALSE)
+	return length(get_active_player_list(alive_check, afk_check, human_check))

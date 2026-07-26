@@ -64,7 +64,7 @@
 	heavy = TRUE
 	charge_cost = 300
 	projectile_type = /obj/projectile/beam/stun/darkmatter
-	cell_type = /obj/item/cell/device/weapon/recharge
+	cell_type = /obj/item/cell/regen/weapon
 	legacy_battery_lock = 1
 	accuracy = 30
 
@@ -131,6 +131,9 @@
 
 	embed_chance = 0
 
+/obj/projectile/energy/darkmatter/dragonfly
+	damage_type = DAMAGE_TYPE_SEARING
+
 /*
  * Vox Sonic Cannon
  */
@@ -141,7 +144,7 @@
 	item_state = "noise"
 	w_class = WEIGHT_CLASS_HUGE
 	heavy = TRUE
-	cell_type = /obj/item/cell/device/weapon/recharge
+	cell_type = /obj/item/cell/regen/weapon
 	legacy_battery_lock = 1
 	charge_cost = 400
 

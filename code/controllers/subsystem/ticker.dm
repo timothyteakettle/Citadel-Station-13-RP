@@ -65,6 +65,11 @@ SUBSYSTEM_DEF(ticker)
 	//Now we have a general cinematic centrally held within the gameticker....far more efficient!
 	var/atom/movable/screen/cinematic = null
 
+	/**
+	 * The time the round started at.
+	 * * If the round has not started yet, this is null and should not be read.
+	 * * Use STATION_TIME_PASSED() to get round time in deciseconds instead.
+	 */
 	var/static/round_start_time
 	var/static/list/round_start_events
 	var/static/list/round_end_events
@@ -111,12 +116,11 @@ SUBSYSTEM_DEF(ticker)
 				if(blackbox)
 					blackbox.save_all_data_to_sql()
 
-				send2irc("Server", "A round of [mode.name] just ended.")
 				if(CONFIG_GET(string/chat_roundend_notice_tag))
 					var/broadcastmessage = "The round has ended."
 					if(CONFIG_GET(string/chat_reboot_role))
 						broadcastmessage += "\n\n<@&[CONFIG_GET(string/chat_reboot_role)]>, the server will reboot shortly!"
-					send2chat(broadcastmessage, CONFIG_GET(string/chat_roundend_notice_tag))
+					send2chat(new /datum/tgs_message_content(broadcastmessage), CONFIG_GET(string/chat_roundend_notice_tag))
 
 				SSdbcore.SetRoundEnd()
 				SSpersistence.SavePersistence()
@@ -125,7 +129,7 @@ SUBSYSTEM_DEF(ticker)
 
 
 /datum/controller/subsystem/ticker/proc/on_mc_init_finish()
-	send2irc("Server lobby is loaded and open at byond://[config_legacy.serverurl ? config_legacy.serverurl : (config_legacy.server ? config_legacy.server : "[world.address]:[world.port]")]")
+	send2chat(new /datum/tgs_message_content("Server lobby is loaded and open at byond://[config_legacy.serverurl ? config_legacy.serverurl : (config_legacy.server ? config_legacy.server : "[world.address]:[world.port]")]"))
 	to_chat(world, "<span class='boldnotice'>Welcome to the pregame lobby!</span>")
 	to_chat(world, "Please set up your character and select ready. The round will start in [CONFIG_GET(number/lobby_countdown)] seconds.")
 	SEND_SOUND(world, sound('sound/misc/server-ready.ogg', volume = 100))
@@ -552,6 +556,7 @@ SUBSYSTEM_DEF(ticker)
 
 	to_chat(world, "<span class='infoplain'><BR><BR><BR><span class='big bold'>The round has ended.</span></span>")
 	log_game("The round has ended.")
+	send2adminchat("Server", "Round just ended.")
 
 	for(var/datum/callback/roundend_callbacks as anything in round_end_events)
 		roundend_callbacks.InvokeAsync()
@@ -603,7 +608,7 @@ SUBSYSTEM_DEF(ticker)
 
 	for (var/mob/living/silicon/robot/robo in GLOB.mob_list)
 
-		if(istype(robo,/mob/living/silicon/robot/drone) && !istype(robo,/mob/living/silicon/robot/drone/swarm))
+		if(istype(robo,/mob/living/silicon/robot/drone))
 			dronecount++
 			continue
 

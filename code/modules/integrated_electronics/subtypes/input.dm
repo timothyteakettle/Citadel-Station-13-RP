@@ -820,6 +820,8 @@
 		return FALSE
 	if(code != signal.encryption)
 		return FALSE
+	if(!(get_z(src) in GetConnectedZlevels(get_z(signal.source))))
+		return FALSE
 	return TRUE
 
 /obj/item/integrated_circuit/input/signaler/proc/create_signal()
@@ -877,6 +879,7 @@
 /obj/item/integrated_circuit/input/signaler/advanced/create_signal()
 	var/datum/signal/signal = new()
 	signal.transmission_method = 1
+	signal.source = src
 	signal.data["command"] = command
 	signal.encryption = code
 	return signal
@@ -1314,6 +1317,7 @@ GLOBAL_DATUM_INIT(circuit_translation_context, /datum/translation_context/simple
 	power_draw_per_use = 1
 
 /obj/item/integrated_circuit/input/internalbm/do_work(ord)
+	var/obj/item/cell/battery = get_cell()
 	if(ord == 1)
 		set_pin_data(IC_OUTPUT, 1, null)
 		set_pin_data(IC_OUTPUT, 2, null)
@@ -1322,11 +1326,11 @@ GLOBAL_DATUM_INIT(circuit_translation_context, /datum/translation_context/simple
 		set_pin_data(IC_OUTPUT, 5, null)
 		if(assembly)
 			set_pin_data(IC_OUTPUT, 4, WEAKREF(assembly))
-			if(assembly.battery)
-				set_pin_data(IC_OUTPUT, 1, assembly.battery.charge)
-				set_pin_data(IC_OUTPUT, 2, assembly.battery.maxcharge)
-				set_pin_data(IC_OUTPUT, 3, 100*assembly.battery.charge/assembly.battery.maxcharge)
-				set_pin_data(IC_OUTPUT, 5, WEAKREF(assembly.battery))
+			if(battery)
+				set_pin_data(IC_OUTPUT, 1, battery.charge)
+				set_pin_data(IC_OUTPUT, 2, battery.max_charge)
+				set_pin_data(IC_OUTPUT, 3, 100*battery.charge/battery.max_charge)
+				set_pin_data(IC_OUTPUT, 5, WEAKREF(battery))
 		push_data()
 		activate_pin(2)
 
@@ -1373,7 +1377,7 @@ GLOBAL_DATUM_INIT(circuit_translation_context, /datum/translation_context/simple
 				if(A.Adjacent(B) || (AM in view(A)))
 					push_data()
 					set_pin_data(IC_OUTPUT, 1, cell.charge)
-					set_pin_data(IC_OUTPUT, 2, cell.maxcharge)
+					set_pin_data(IC_OUTPUT, 2, cell.max_charge)
 					set_pin_data(IC_OUTPUT, 3, cell.percent())
 		push_data()
 		activate_pin(2)
