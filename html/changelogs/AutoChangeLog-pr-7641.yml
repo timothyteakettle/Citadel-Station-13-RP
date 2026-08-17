@@ -1,0 +1,4 @@
+author: "timothyteakettle"
+delete-after: True
+changes:
+  - bugfix: "fixes dead holospheres showing as alive in the orbit UI\n:cl:"
