@@ -1,4 +1,0 @@
-author: "timothyteakettle"
-delete-after: True
-changes:
-  - bugfix: "fixes holosphere shells not getting real_name set resulting in quirky behaviour\n:cl:"
