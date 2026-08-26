@@ -1,4 +1,0 @@
-author: "GySgtMurphy"
-delete-after: True
-changes:
-  - qol: "removes what seems like a lien of debug code that was left in accidentally"
