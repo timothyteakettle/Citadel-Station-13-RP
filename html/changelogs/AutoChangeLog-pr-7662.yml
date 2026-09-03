@@ -1,0 +1,9 @@
+author: "GySgtMurphy"
+delete-after: True
+changes:
+  - rscadd: "Added sifters, forageables, etc."
+  - rscdel: "old sifter shells, no longer used or needed."
+  - tweak: "Made scori immune to chlorine"
+  - bugfix: "fixed a few things related to scori hotsauce."
+  - imageadd: "added some icons and images for sprites involved in sifters and forageables."
+  - code_imp: "changed some code about stuff listed above."
