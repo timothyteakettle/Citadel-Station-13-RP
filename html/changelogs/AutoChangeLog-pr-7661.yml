@@ -1,0 +1,5 @@
+author: "its-helvi"
+delete-after: True
+changes:
+  - rscadd: "You can now select custom runechat colors for your blorbos."
+  - bugfix: "Runechat colors no longer randomize."
