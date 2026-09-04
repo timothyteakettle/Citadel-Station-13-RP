@@ -5,6 +5,8 @@
 	icon = 'icons/obj/wallet.dmi'
 	icon_state = "wallet-orange"
 	w_class = WEIGHT_CLASS_SMALL
+	max_combined_volume = WEIGHT_VOLUME_SMALL * 4
+	max_single_weight_class = WEIGHT_CLASS_SMALL
 	insertion_whitelist = list(
 		/obj/item/spacecash,
 		/obj/item/card,
@@ -111,7 +113,7 @@
 
 /obj/item/storage/wallet/poly/Initialize(mapload)
 	. = ..()
-	add_atom_color("#"+get_random_colour())
+	add_atom_color(get_random_colour())
 	update_icon()
 
 /obj/item/storage/wallet/poly/verb/change_color()

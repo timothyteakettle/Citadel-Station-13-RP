@@ -505,7 +505,6 @@
 /area)
 "cu" = (
 /obj/structure/lattice,
-/obj/structure/lattice,
 /turf/space,
 /area)
 "cv" = (
@@ -1078,8 +1077,7 @@
 "fm" = (
 /turf/simulated/mineral{
 	icon_state = "sandstone0";
-	mineral = "sandstone";
-
+	mineral = "sandstone"
 	},
 /area/awaymission/wwmines)
 "fo" = (

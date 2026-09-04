@@ -100,14 +100,19 @@
 /obj/machinery
 	name = "machinery"
 	icon = 'icons/obj/stationobjs.dmi'
+	desc = "Some kind of machine."
+	abstract_type = /obj/machinery
 	w_class = WEIGHT_CLASS_HUGE
 	layer = UNDER_JUNK_LAYER
 	// todo: don't block rad contents and just have component parts be unable to be contaminated while inside
 	// todo: wow rad contents is a weird system
 	rad_flags = RAD_BLOCK_CONTENTS
+	interaction_flags_atom = INTERACT_ATOM_ATTACK_HAND | INTERACT_ATOM_UI_INTERACT
+	blocks_emissive = EMISSIVE_BLOCK_GENERIC
 	// todo: anchored / unanchored should be replaced by movement force someday, how to handle that?
 
-	//* Construction / Deconstruction
+	//* Construction / Deconstruction *//
+
 	/// allow default part replacement. null for disallowed, number for time.
 	var/default_part_replacement = 0
 	/// Can be constructed / deconstructed by players by default. null for off, number for time needed. Panel must be open.
@@ -130,6 +135,11 @@
 	var/panel_icon_state
 	/// is the maintenance panel open?
 	var/panel_open = FALSE
+
+	//* Machinery Systems *//
+
+	/// Occupant pod system, if any
+	var/datum/machinery_system/occupant_pod/machine_occupant_pod
 
 	//* unsorted
 	var/machine_stat = 0
@@ -182,6 +192,7 @@
 		power_change()
 
 /obj/machinery/Destroy()
+	QDEL_NULL(machine_occupant_pod)
 	GLOB.machines.Remove(src)
 	if(!speed_process)
 		STOP_MACHINE_PROCESSING(src)
@@ -276,17 +287,40 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+/obj/machinery/attack_robot(mob/user)
+	if(!(interaction_flags_machine & INTERACT_MACHINE_ALLOW_SILICON) && !isAdminGhostAI(user))
+		return FALSE
+
+	if(!Adjacent(user) || !has_buckled_mobs()) //so that borgs (but not AIs, sadly (perhaps in a future PR?)) can unbuckle people from machines
+		return _try_interact(user)
+
+	if(length(buckled_mobs) <= 1)
+		if(user_unbuckle_mob(buckled_mobs[1],user))
+			return TRUE
+
+	var/unbuckled = tgui_input_list(user, "Who do you wish to unbuckle?", "Unbuckle", sortNames(buckled_mobs))
+	if(isnull(unbuckled))
+		return FALSE
+	if(user_unbuckle_mob(unbuckled, NONE, user))
+		return TRUE
+
+	return _try_interact(user)
+
 /obj/machinery/attack_ai(mob/user)
-	if(IsAdminGhost(user))
-		interact(user)
-		return
-	if(isrobot(user))
-		// For some reason attack_robot doesn't work
+	if(!(interaction_flags_machine & INTERACT_MACHINE_ALLOW_SILICON) && !isAdminGhostAI(user))
+		return FALSE
+	if(isrobot(user))// For some reason attack_robot doesn't work
 		// This is to stop robots from using cameras to remotely control machines.
 		if(user.client && user.client.eye == user)
-			return attack_hand(user)
-	else
-		return attack_hand(user)
+			return attack_robot(user)
+	return _try_interact(user)
+
+/obj/machinery/_try_interact(mob/user)
+	if((interaction_flags_machine & INTERACT_MACHINE_WIRES_IF_OPEN) && panel_open)
+		return TRUE
+	// if(SEND_SIGNAL(user, COMSIG_TRY_USE_MACHINE, src) & COMPONENT_CANT_USE_MACHINE_INTERACT)
+	// 	return TRUE
+	return ..()
 
 // todo: refactor
 /obj/machinery/attack_hand(mob/user, datum/event_args/actor/clickchain/e_args)
@@ -311,47 +345,96 @@
 
 	return ..()
 
-/obj/machinery/attackby(obj/item/I, mob/living/user, list/params, clickchain_flags, damage_multiplier)
-	if(istype(I, /obj/item/storage/part_replacer))
-		if(isnull(default_part_replacement))
-			user.action_feedback(SPAN_WARNING("[src] doesn't support part replacement."), src)
-			return CLICKCHAIN_DO_NOT_PROPAGATE
-		default_part_replacement(user, I)
+/obj/machinery/on_attack_hand(datum/event_args/actor/clickchain/clickchain, clickchain_flags)
+	. = ..()
+	if(. & CLICKCHAIN_FLAGS_INTERACT_ABORT)
+		return
+	if(machine_occupant_pod)
+		if(machine_occupant_pod.door_via_click && machine_occupant_pod.supports_opening())
+			machine_occupant_pod.user_toggle_click(clickchain)
+			return CLICKCHAIN_DID_SOMETHING
+		else if(machine_occupant_pod.eject_via_click && machine_occupant_pod.is_occupied())
+			machine_occupant_pod.user_eject_click(clickchain)
+			return CLICKCHAIN_DID_SOMETHING
+
+/obj/machinery/using_item_on(obj/item/using, datum/event_args/actor/clickchain/clickchain, clickchain_flags)
+	. = ..()
+	if(. & CLICKCHAIN_FLAGS_INTERACT_ABORT)
+		return
+	// default machine occupant pod is checked first
+	if(machine_occupant_pod?.occupant)
+		return
+	if(!isnull(default_part_replacement) && default_part_replacement(clickchain.performer, using))
+		return CLICKCHAIN_DID_SOMETHING | CLICKCHAIN_DO_NOT_PROPAGATE
+	if(istype(using, /obj/item/grab) && machine_occupant_pod?.insert_via_grab)
+		var/obj/item/grab/casted_grab = using
+		machine_occupant_pod?.user_insert_grab(casted_grab.affecting, clickchain)
 		return CLICKCHAIN_DO_NOT_PROPAGATE | CLICKCHAIN_DID_SOMETHING
-	return ..()
+
+/obj/machinery/MouseDroppedOn(atom/dropping, mob/user, proximity, params)
+	. = ..()
+	if(. & CLICKCHAIN_FLAGS_INTERACT_ABORT)
+		return
+	if(machine_occupant_pod && ismob(dropping) && user.Reachability(src))
+		if((dropping != user) && machine_occupant_pod.insert_via_dragdrop)
+			machine_occupant_pod.user_insert_dragdrop(dropping, new /datum/event_args/actor(user))
+			return CLICKCHAIN_DO_NOT_PROPAGATE | CLICKCHAIN_DID_SOMETHING
+		if((dropping == user) && machine_occupant_pod.enter_via_dragdrop)
+			machine_occupant_pod.user_enter_dragdrop(new /datum/event_args/actor(user))
+			return CLICKCHAIN_DO_NOT_PROPAGATE | CLICKCHAIN_DID_SOMETHING
+
+/obj/machinery/Exited(atom/movable/AM, atom/newLoc)
+	..()
+	if(machine_occupant_pod && AM == machine_occupant_pod.occupant)
+		machine_occupant_pod.eject(suppressed = TRUE)
 
 /obj/machinery/can_interact(mob/user)
+	if(QDELETED(user))
+		return FALSE
+
 	if((machine_stat & (NOPOWER|BROKEN|MAINT)) && !(interaction_flags_machine & INTERACT_MACHINE_OFFLINE)) // Check if the machine is broken, and if we can still interact with it if so
 		return FALSE
-	var/silicon = issilicon(user)
-	if(panel_open && !(interaction_flags_machine & INTERACT_MACHINE_OPEN)) // Check if we can interact with an open panel machine, if the panel is open
-		if(!silicon || !(interaction_flags_machine & INTERACT_MACHINE_OPEN_SILICON))
-			return FALSE
-	// check silicon, but cyborgs can interact if within reach.
-	// todo: refactor interaction flags, fuck.
-	if(silicon && (!isrobot(user) || !user.Reachability(src))) // If we are an AI or adminghsot, make sure the machine allows silicons to interact
+
+	if(isAdminGhostAI(user))
+		return TRUE //the Gods have unlimited power and do not care for things such as range or blindness
+
+	if(!isliving(user))
+		return FALSE //no ghosts allowed, sorry
+
+	if(issilicon(user)) // If we are a silicon, make sure the machine allows silicons to interact with it
 		if(!(interaction_flags_machine & INTERACT_MACHINE_ALLOW_SILICON))
 			return FALSE
-	else if(isliving(user)) // If we are a living human
-		var/mob/living/L = user
-		if(interaction_flags_machine & INTERACT_MACHINE_REQUIRES_SILICON) // First make sure the machine doesn't require silicon interaction
+
+		if(panel_open && !(interaction_flags_machine & INTERACT_MACHINE_OPEN) && !(interaction_flags_machine & INTERACT_MACHINE_OPEN_SILICON))
 			return FALSE
 
-		if(interaction_flags_machine & INTERACT_MACHINE_REQUIRES_SIGHT)
-			if(user.is_blind())
-				to_chat(user, SPAN_WARNING("This machine requires sight to use."))
-				return FALSE
-/*
-		if(!Adjacent(user)) // Next make sure we are next to the machine unless we have telekinesis
-			var/mob/living/carbon/H = L
-			if(!(istype(H) && H.has_dna() && H.dna.check_mutation(MUTATION_TELEKINESIS)))
-				return FALSE
-*/
-		if(L.incapacitated()) // Finally make sure we aren't incapacitated
-			return FALSE
-	else // If we aren't a silicon, living, or admin ghost, bad!
+		return user.can_interact_with(src) //AIs don't care about petty mortal concerns like needing to be next to a machine to use it, but borgs do care somewhat
+
+	. = ..()
+	if(!.)
 		return FALSE
-	return TRUE // If we pass all these checks, woohoo! We can interact
+
+	if((interaction_flags_machine & INTERACT_MACHINE_REQUIRES_SIGHT) && user.is_blind())
+		to_chat(user, SPAN_WARNING("This machine requires sight to use."))
+		return FALSE
+
+	// machines have their own lit up display screens and LED buttons so we don't need to check for light
+	// if((interaction_flags_machine & INTERACT_MACHINE_REQUIRES_LITERACY) && !user.can_read(src, READING_CHECK_LITERACY))
+	// 	return FALSE
+
+	if(panel_open && !(interaction_flags_machine & INTERACT_MACHINE_OPEN))
+		return FALSE
+
+	if(interaction_flags_machine & INTERACT_MACHINE_REQUIRES_SILICON) //if the user was a silicon, we'd have returned out earlier, so the user must not be a silicon
+		return FALSE
+
+	if(interaction_flags_machine & INTERACT_MACHINE_REQUIRES_STANDING)
+		var/mob/living/living_user = user
+		if(!(living_user.mobility_flags & MOBILITY_IS_STANDING))
+			return FALSE
+
+	return TRUE // If we passed all of those checks, woohoo! We can interact with this machine.
+
 
 /obj/machinery/proc/RefreshParts() //Placeholder proc for machines that are built using frames.
 	return
@@ -523,6 +606,8 @@
 
 /obj/machinery/drop_products(method, atom/where)
 	. = ..()
+	if(machine_occupant_pod?.occupant)
+		machine_occupant_pod.eject(where || drop_location(), silent = TRUE, suppressed = TRUE)
 	if(isnull(circuit))
 		return
 	var/obj/structure/frame/A = new /obj/structure/frame(src.loc)
@@ -580,25 +665,6 @@
 /obj/machinery/proc/on_deconstruction()
 	return
 
-/**
- * Puts passed object in to user's hand
- *
- * Puts the passed object in to the users hand if they are adjacent.
- * If the user is not adjacent then place the object on top of the machine.
- *
- * Vars:
- * * object (obj) The object to be moved in to the users hand.
- * * user (mob/living) The user to recive the object
- */
-/obj/machinery/proc/try_put_in_hand(obj/object, mob/living/user)
-	if(!issilicon(user) && in_range(src, user))
-		user.grab_item_from_interacted_with(object, src)
-		// todo: probably split this proc into something that isn't try
-		// because if this fails and something nulls, something bad happens
-		// i bandaided this to drop location but that's inflexible
-	else
-		object.forceMove(drop_location())
-
 /// Adjust item drop location to a 3x3 grid inside the tile, returns slot id from 0 to 8.
 /obj/machinery/proc/adjust_item_drop_location(atom/movable/dropped_atom)
 	var/md5 = md5(dropped_atom.name) // Oh, and it's deterministic too. A specific item will always drop from the same slot.
@@ -617,3 +683,94 @@
 	. = ..()
 	// todo: rework
 	machine_stat &= ~BROKEN
+
+/obj/machinery/context_menu_query(datum/event_args/actor/e_args)
+	. = ..()
+	if(machine_occupant_pod)
+		if(machine_occupant_pod.door_via_context && machine_occupant_pod.supports_opening())
+			.["occupant_pod-toggle"] = create_context_menu_tuple(
+				"toggle open",
+				image(src),
+				1,
+				MOBILITY_CAN_USE,
+				FALSE,
+			)
+		else if(machine_occupant_pod.eject_via_context && machine_occupant_pod.is_occupied())
+			.["occupant_pod-eject"] = create_context_menu_tuple(
+				"eject",
+				image(src),
+				1,
+				MOBILITY_CAN_USE,
+				FALSE,
+			)
+		else if(machine_occupant_pod.enter_via_context && !machine_occupant_pod.is_occupied())
+			.["occupant_pod-enter"] = create_context_menu_tuple(
+				"enter",
+				image(src),
+				1,
+				MOBILITY_CAN_USE,
+				FALSE,
+			)
+
+/obj/machinery/context_menu_act(datum/event_args/actor/e_args, key)
+	. = ..()
+	if(.)
+		return
+	switch(key)
+		if("occupant_pod-toggle")
+			if(!machine_occupant_pod.door_via_context || !machine_occupant_pod.supports_opening())
+				return TRUE
+			machine_occupant_pod.user_toggle_context(e_args)
+			return TRUE
+		if("occupant_pod-eject")
+			if(!machine_occupant_pod.eject_via_context || !machine_occupant_pod.is_occupied())
+				return TRUE
+			machine_occupant_pod.user_eject_context(e_args)
+			return TRUE
+		if("occupant_pod-enter")
+			if(!machine_occupant_pod.enter_via_context || machine_occupant_pod.is_occupied())
+				return TRUE
+			machine_occupant_pod.user_enter_context(e_args)
+			return TRUE
+
+/obj/machinery/contents_resist(mob/escapee)
+	. = ..()
+	if(.)
+		return
+	if(machine_occupant_pod)
+		if(machine_occupant_pod.eject_via_resist && machine_occupant_pod.occupant == escapee)
+			machine_occupant_pod.user_eject_resist(new /datum/event_args/actor(escapee))
+			return TRUE
+
+/obj/machinery/relaymove_from_contents(mob/user, direction)
+	..()
+	if(machine_occupant_pod)
+		if(machine_occupant_pod.eject_via_move && machine_occupant_pod.occupant == user)
+			machine_occupant_pod.user_eject_move(new /datum/event_args/actor(user))
+
+//* Some common inventory helpers *//
+
+/**
+ * Puts passed item in to user's hand
+ *
+ * * Puts the passed object in to the users hand if they are adjacent.
+ * * If the user is not adjacent then place the object on top of the machine.
+ * * This will always move the item out of the machine.
+ * * This does not check the item actually is in ourselves.
+ *
+ * @params
+ * * item (obj/item) The item to be moved in to the users hand.
+ * * user (mob) The user to recive the object
+ *
+ * @return TRUE if item was yanked into hands, FALSE if item was just normally removed
+ */
+/obj/machinery/proc/yank_item_out(obj/item/item, mob/user)
+	if(!issilicon(user) && in_range(src, user))
+		user.grab_item_from_interacted_with(item, src)
+		// todo: probably split this proc into something that isn't try
+		// because if this fails and something nulls, something bad happens
+		// i bandaided this to drop location but that's inflexible
+		return item.inv_inside == user.inventory
+	else
+		item.forceMove(drop_location())
+		return FALSE

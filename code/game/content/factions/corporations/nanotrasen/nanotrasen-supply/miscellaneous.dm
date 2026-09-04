@@ -172,7 +172,7 @@
 	name = "Belt-miner gear crate"
 	contains = list(
 		/obj/item/gun/projectile/energy/particle = 2,
-		/obj/item/cell/device/weapon = 2,
+		/obj/item/cell/basic/tier_2/weapon = 2,
 		/obj/item/storage/firstaid/regular = 1,
 		/obj/item/gps = 2,
 		/obj/item/storage/box/traumainjectors = 1,
@@ -298,3 +298,10 @@
 		/obj/item/device/walkpod = 3,
 	)
 	worth = 75
+
+/datum/supply_pack/nanotrasen/misc/hami
+	name = "H.A.M.I. Kits"
+	contains = list(
+		/obj/item/storage/box/hami = 2
+	)
+	worth = 500

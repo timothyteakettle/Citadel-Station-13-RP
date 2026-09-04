@@ -24,6 +24,8 @@
 	base_color = "#373652"
 	blood_color = "#3c6d45"
 
+	reagent_tag = IS_SCORI
+
 	max_age = 200
 
 	galactic_language = FALSE
@@ -66,3 +68,6 @@
 		/mob/living/carbon/human/proc/hide_wings,
 		/mob/living/carbon/human/proc/hide_tail
 		)
+
+/datum/species/scori/apply_survival_gear()
+	return

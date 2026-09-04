@@ -125,7 +125,7 @@
 		if(!EA.opened)
 			to_chat(user, SPAN_WARNING("You can't reach [EA]'s components to remove them!"))
 			return
-		if(EA.battery)
+		if(EA.obj_cell_slot?.cell)
 			to_chat(user, SPAN_WARNING("Remove [EA]'s power cell first!"))
 			return
 		var/inc = 0
@@ -296,7 +296,6 @@
 				program = null
 				return
 			if(istext(new_input))
-				to_chat(usr, SPAN_NOTICE("[new_input]"))
 				to_chat(usr, SPAN_NOTICE("Load blueprint pressed"))
 			log_game("[usr] inputted blueprint for circuit [new_input]")
 			var/validation = SScircuit.validate_electronic_assembly(new_input)

@@ -18,6 +18,7 @@
 	pickup_sound = 'sound/items/pickup/gun.ogg'
 	preserve_item = 1
 	suit_storage_class = SUIT_STORAGE_CLASS_SOFTWEAR
+	belt_storage_class = BELT_CLASS_SMALL
 	var/filled = 0
 	var/list/filled_reagents = list()
 	var/hyposound	// What sound do we play on use?
@@ -554,3 +555,8 @@
 	desc = "A plain brass autoinjector with an esoteric label. ‘Take a day trip to the Field of Reeds.’"
 	icon_state = "ankh"
 	filled_reagents = list("zombiepowder" = 20)
+
+/obj/item/reagent_containers/hypospray/autoinjector/vaccine
+	name = "innoculation autoinjector"
+	desc = "An autoinjector loaded with a cocktail of vaccines and agents designed to minimize the risk of spreading disease."
+	filled_reagents = list("spaceacillin" = 5)

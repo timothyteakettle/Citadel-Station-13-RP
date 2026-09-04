@@ -239,6 +239,7 @@
 	icon_state = "cigpacket"
 	item_state_slots = list(SLOT_ID_RIGHT_HAND = "cigpacket", SLOT_ID_LEFT_HAND = "cigpacket")
 	suit_storage_class = SUIT_STORAGE_CLASS_SOFTWEAR
+	belt_storage_class = BELT_CLASS_SMALL
 	w_class = WEIGHT_CLASS_TINY
 	throw_force = 2
 	slot_flags = SLOT_BELT | SLOT_EARS
@@ -360,6 +361,24 @@
 	icon_state = "SRpacket"
 	starts_with = list(/obj/item/clothing/mask/smokable/cigarette/herbal = 6)
 	brand = "\improper Subrosa"
+
+// Seasonals
+
+/obj/item/storage/fancy/cigarettes/vanillas
+	name = "\improper pack of Temperamento Vanillas"
+	desc = "A packet of limited-edition, vanilla flavoured Temperamentos. These are outlawed in several territories, but not frontier space!"
+	icon_state = "TVpacket"
+	brand = "\improper Temperamento Vanilla"
+
+/obj/item/storage/fancy/cigarettes/kaijus
+	name = "\improper pack of Kaiju Cherries"
+	desc = "A packet of limited-edition, cherry flavoured Kaiju cigarettes. A favourite of edgy goths across the Frontier."
+	icon_state = "KJpacket"
+	starts_with = list(/obj/item/clothing/mask/smokable/cigarette/kaiju = 6)
+	brand = "\improper Kaiju Cherry"
+
+
+// Cigars
 
 /obj/item/storage/fancy/cigar
 	name = "cigar case"

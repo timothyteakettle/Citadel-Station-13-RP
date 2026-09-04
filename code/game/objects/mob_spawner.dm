@@ -159,6 +159,22 @@ It also makes it so a ghost wont know where all the goodies/mobs are.
 	/mob/living/simple_mob/animal/stormdrifter/bull = 30
 	)
 
+/obj/structure/mob_spawner/sandsifter
+	name = "Sand Sifter Colony"
+	desc = "A pile of rocks and other debris sand sifters often nest in."
+	icon = 'icons/obj/lavaland/lavaland_flora.dmi'
+	icon_state = "snails"
+	spawn_delay = 5 MINUTES
+	simultaneous_spawns = 8
+	mob_faction = MOB_IFF_FACTION_BIND_TO_MAP
+	total_spawns = 36
+	anchored = 1
+	integrity_flags = NONE
+	integrity = 100
+	spawn_types = list(
+	/mob/living/simple_mob/animal/sandsifter = 100
+	)
+
 //Scanners
 /obj/structure/mob_spawner/scanner/corgi
 	name = "Corgi Lazy Spawner"

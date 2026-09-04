@@ -78,10 +78,6 @@
 				return
 	return
 
-/obj/structure/morgue/attack_robot(mob/user)
-	if(Adjacent(user))
-		attack_hand(user)
-
 /obj/structure/morgue/attack_hand(mob/user, datum/event_args/actor/clickchain/e_args)
 	if (!anchored)
 		user.show_message(SPAN_WARNING("You can't open [src] while it's unanchored."))
@@ -92,8 +88,6 @@
 		open()
 	src.add_fingerprint(user)
 	update()
-	return
-
 
 /obj/structure/morgue/proc/close()
 	for(var/atom/movable/A as mob|obj in src.connected.loc)
@@ -175,10 +169,6 @@
 	connected = null
 	return ..()
 
-/obj/structure/m_tray/attack_robot(mob/user)
-	if(Adjacent(user))
-		attack_hand(user)
-
 /obj/structure/m_tray/attack_hand(mob/user, datum/event_args/actor/clickchain/e_args)
 	if (src.connected)
 		for(var/atom/movable/A as mob|obj in src.loc)
@@ -190,8 +180,6 @@
 		add_fingerprint(user)
 		//SN src = null
 		qdel(src)
-		return
-	return
 
 /obj/structure/m_tray/MouseDroppedOnLegacy(atom/movable/O as mob|obj, mob/user as mob)
 	if ((!( istype(O, /atom/movable) ) || O.anchored || get_dist(user, src) > 1 || get_dist(user, O) > 1 || user.contents.Find(src) || user.contents.Find(O)))
@@ -305,7 +293,7 @@ GLOBAL_LIST_BOILERPLATE(all_crematoriums, /obj/structure/morgue/crematorium)
 			return
 
 	else
-		if(!!length(src.search_contents_for(/obj/item/disk/nuclear)))
+		if(!!length(src.get_all_contents_filtered(cached_typecacheof(/obj/item/disk/nuclear))))
 			to_chat(user,"You get the feeling that you shouldn't cremate one of the items in the cremator.")
 			return
 
@@ -385,7 +373,7 @@ GLOBAL_LIST_BOILERPLATE(all_crematoriums, /obj/structure/morgue/crematorium)
 			M.show_message("<span class='warning'>You hear a hollow crackle.</span>", 1)
 			return
 	else
-		if(!!length(src.search_contents_for(/obj/item/disk/nuclear)))
+		if(!!length(src.get_all_contents_filtered(cached_typecacheof(/obj/item/disk/nuclear))))
 			to_chat(usr, "You get the feeling that you shouldn't cremate one of the items in the cremator.")
 			return
 

@@ -249,7 +249,10 @@
 	required_reagents = list("triglyceride" = 1, "protein" = 1, "alchemybase" = 1)
 	result_amount = 3
 
-/datum/chemical_reaction/soap
+// Replacing (most) reactions that produce items with a crafting recipe. Less janky
+
+/*
+ /datum/chemical_reaction/soap
 	name = "Soap"
 	id = "soap"
 	required_reagents = list("tallow" = 1, "water" = 1, "ash" = 1)
@@ -258,7 +261,11 @@
 	. = ..()
 	new /obj/item/soap/primitive(get_turf(holder.my_atom))
 
+*/
+
 // todo: why is this a chemical reaction? make a chalkcrafting system or something...
+
+// chalk crafting system is in now kinda
 
 // you know what fuck you; this trips up unit tests. i'm just commenting it out.
 // /datum/chemical_reaction/charcoal_stick
@@ -306,6 +313,7 @@
 	required_reagents = list("gunpowder" = 2, "alchemybase" = 1)
 	result_amount = 3
 
+/*
 /datum/chemical_reaction/condensedphlogiston
 	name = "Condensed Phlogiston"
 	id = "condensedphlogiston"
@@ -325,6 +333,124 @@
 	. = ..()
 	for(var/i in 1 to multiplier)
 		new /obj/item/bitterash(get_turf(holder.my_atom))
+*/
+
+/datum/chemical_reaction/alchemizebentar
+	name = "Alchemize Bentar"
+	id = "alchemizebentar"
+	result = "anti_toxin"
+	required_reagents = list("bentarjuice" = 1, "catalyst" = 0.1)
+	catalysts = list("catalyst" = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/alchemizeshimash
+	name = "Alchemize Shimash"
+	id = "alchemizeshimash"
+	result = "tramadol"
+	required_reagents = list("shimashpulp" = 1, "catalyst" = 0.1)
+	catalysts = list("catalyst" = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/alchemizepokalea
+	name = "Alchemize Pokalea"
+	id = "alchemizepokalea"
+	result = "leporazine"
+	required_reagents = list("pokaleapaste" = 1, "catalyst" = 0.1)
+	catalysts = list("catalyst" = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/alchemizejuhtak
+	name = "Alchemize Juhtak"
+	id = "alchemizejuhtak"
+	result = "bicaridine"
+	required_reagents = list("juhtakpulp" = 1, "catalyst" = 0.1)
+	catalysts = list("catalyst" = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/alchemizepyrrhlea
+	name = "Alchemize Pyrrhlea"
+	id = "alchemizepyrrhlea"
+	result = "kelotane"
+	required_reagents = list("pyrrhleanectar" = 1, "catalyst" = 0.1)
+	catalysts = list("catalyst" = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/alchemizebanana
+	name = "Alchemize Banana Juice"
+	id = "alchemizebanana"
+	result = "potassium"
+	required_reagents = list("banana" = 1, "catalyst" = 0.1)
+	catalysts = list("catalyst" = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/alchemizebonemeal
+	name = "Alchemize Bonemeal"
+	id = "alchemizebonemeal"
+	result = "phosphorus"
+	required_reagents = list("bonemeal" = 1, "catalyst" = 0.1)
+	catalysts = list("catalyst" = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/dilutecersut
+	name = "Dilute Cersut"
+	id = "dilutecersut"
+	result = "sacid"
+	required_reagents = list("cersutpaste" = 1, "water" = 1)
+	result_amount = 2
+
+/datum/chemical_reaction/purifyiron
+	name = "Purify Hematite"
+	id = "purifyiron"
+	result = "iron"
+	required_reagents = list("hematite" = 1, "catalyst" = 0.5)
+	catalysts = list("catalyst" = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/purifyuranium
+	name = "Purify Uraninite"
+	id = "purifyuranium"
+	result = "uranium"
+	required_reagents = list("uraninite" = 1, "catalyst" = 0.5)
+	catalysts = list("catalyst" = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/purifylead
+	name = "Purify Galena"
+	id = "purifylead"
+	result = "lead"
+	required_reagents = list("galena" = 1, "catalyst" = 0.1)
+	catalysts = list("catalyst" = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/purifyphoron
+	name = "Purify Phoronite"
+	id = "purifyphoron"
+	result = "phoron"
+	required_reagents = list("phoronite" = 1, "catalyst" = 0.5)
+	catalysts = list("catalyst" = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/releasehydrogen
+	name = "Release Hydrogen"
+	id = "releasehydrogen"
+	result = "hydrogen"
+	required_reagents = list("hydronite" = 1, "sacid" = 2, "catalyst" = 0.5)
+	catalysts = list("catalyst" = 5)
+	result_amount = 1
+
+/datum/chemical_reaction/cersutsauce
+	name = "Siishma-Cersut"
+	id = "cersutsauce"
+	result = "cersutsauce"
+	required_reagents = list("cersutpaste" = 1, "sugar" = 1, "pyrrhleanectar" = 1)
+	result_amount = 3
+
+/datum/chemical_reaction/shimashsauce
+	name = "Siishma-Shimash"
+	id = "shimashsauce"
+	result = "shimashsauce"
+	required_reagents = list("shimashpulp" = 1, "sugar" = 1, "water" = 1)
+	result_amount = 3
 
 //Slime related
 /datum/chemical_reaction/slimeify
@@ -368,12 +494,19 @@
 			else
 				H.visible_message("<span class='info'>[H] twitches for a moment, but remains still.</span>") // no nutriment
 
+/datum/chemical_reaction/saltpeter
+	name = "Saltpeter"
+	id = "saltpeter"
+	result = "saltpeter"
+	result_amount = 1
+	required_reagents = list("potassium" = 1, "nitrogen" = 1, "oxygen" = 3)
+
 /datum/chemical_reaction/gunpowder
 	name = "Gunpowder"
 	id = "gunpowder"
 	result = "gunpowder"
 	result_amount = 1
-	required_reagents = list("sulfur" = 1, "carbon" = 1, "potassium" = 1)
+	required_reagents = list("sulfur" = 1, "carbon" = 1, "saltpeter" = 1)
 
 /datum/chemical_reaction/asbestos
 	name = "Asbestos"

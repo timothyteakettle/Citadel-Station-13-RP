@@ -236,8 +236,8 @@
 			prob(2);list(
 				/obj/item/melee/baton/cattleprod,
 				/obj/item/melee/baton/cattleprod,
-				/obj/item/cell/high,
-				/obj/item/cell/high,
+				/obj/item/cell/basic/tier_1/medium,
+				/obj/item/cell/basic/tier_1/medium,
 				/obj/structure/closet/crate
 			),
 			prob(2);list(
@@ -570,7 +570,7 @@
 				/obj/item/module/power_control,
 				/obj/item/stack/cable_coil,
 				/obj/item/frame2/apc,
-				/obj/item/cell/high,
+				/obj/item/cell/basic/tier_1/large,
 				/obj/structure/closet/crate/corporate/focalpoint //FOCAL APC
 			),
 			prob(5);list(
@@ -808,16 +808,16 @@
 			prob(2);list(
 				/obj/random/energy,
 				/obj/random/energy,
-				/obj/item/cell/device/weapon,
-				/obj/item/cell/device/weapon,
-				/obj/item/cell/device/weapon,
-				/obj/item/cell/device/weapon,
+				/obj/item/cell/basic/tier_1/weapon,
+				/obj/item/cell/basic/tier_1/weapon,
+				/obj/item/cell/basic/tier_1/weapon,
+				/obj/item/cell/basic/tier_1/weapon,
 				/obj/random/energy,
 				/obj/random/energy,
-				/obj/item/cell/device/weapon,
-				/obj/item/cell/device/weapon,
-				/obj/item/cell/device/weapon,
-				/obj/item/cell/device/weapon,
+				/obj/item/cell/basic/tier_1/weapon,
+				/obj/item/cell/basic/tier_1/weapon,
+				/obj/item/cell/basic/tier_1/weapon,
+				/obj/item/cell/basic/tier_1/weapon,
 				/obj/structure/closet/crate/large/secure/corporate/heph //HEPH ENERGY
 			),
 			prob(2);list(
@@ -992,3 +992,16 @@
 				prob(1);/obj/structure/snowman/borg,
 				prob(1);/obj/structure/snowman/spider,
 				prob(1);/obj/machinery/crystal/ice)
+
+/obj/random/surt_forage
+	name = "random Surt forageables"
+	desc = "for various random things on Surt"
+	icon = 'icons/obj/lavaland/lavaland_flora.dmi'
+	icon_state = "hangingroot"
+
+/obj/random/surt_forage/item_to_spawn()
+	return pick(prob(20);/obj/structure/flora/lavaland/sirim,
+				prob(30);/obj/structure/flora/lavaland/rockhead,
+				prob(20);/obj/structure/flora/lavaland/mothershair,
+				prob(20);/obj/structure/flora/lavaland/hangingroot,
+				prob(5);/obj/structure/mob_spawner/sandsifter)

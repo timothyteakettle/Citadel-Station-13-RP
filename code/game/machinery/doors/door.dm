@@ -16,6 +16,9 @@
 	// todo: rad_insulation_open/closed
 	pass_flags_self = NONE
 
+	interaction_flags_atom = INTERACT_ATOM_UI_INTERACT
+	blocks_emissive = EMISSIVE_BLOCK_UNIQUE
+
 	integrity = 300
 	integrity_max = 300
 	integrity_failure = 100
@@ -402,14 +405,3 @@
 			bound_height = width * world.icon_size
 
 	update_nearby_tiles()
-
-/obj/machinery/door/morgue
-	icon = 'icons/obj/doors/doormorgue.dmi'
-
-//Flesh Door
-/obj/machinery/door/flesh_door
-	name = "flesh door"
-	desc = "This door pulses and twitches as if it's alive. It is."
-
-	icon = 'icons/turf/stomach_vr.dmi'
-	icon_state = "fleshclosed"

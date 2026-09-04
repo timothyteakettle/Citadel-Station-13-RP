@@ -31,6 +31,9 @@
 
 /// Maximum light_range before forced to always queue instead of using sync updates. Setting this too high will cause server stutter with moving large lights.
 #define LIGHTING_MAXIMUM_INSTANT_RANGE 8
+#define LIGHTING_HARD_MAXIMUM_RANGE 128	//! Light ranges equal to or above this are ignored, we can't render them anyway.
+#define LIGHTING_SOFT_MAXIMUM_RANGE 64	//! Light ranges equal to or above this emit a runtime but are still allowed.
+#define LIGHTING_SOFT_MAXIMUM_POWER 10	//! Light powers equal to or above this emit a runtime but are still allowed.
 
 /**
  * Mostly identical to below, but doesn't make sure T is valid first.
@@ -121,9 +124,11 @@
 
 //! Emissive blocking.
 /// Uses vis_overlays to leverage caching so that very few new items need to be made for the overlay. For anything that doesn't change outline or opaque area much or at all.
-#define EMISSIVE_BLOCK_GENERIC 1
+#define EMISSIVE_BLOCK_GENERIC 0
 /// Uses a dedicated render_target object to copy the entire appearance in real time to the blocking layer. For things that can change in appearance a lot from the base state, like humans.
-#define EMISSIVE_BLOCK_UNIQUE  2
+#define EMISSIVE_BLOCK_UNIQUE 1
+/// Don't block any emissives. Useful for things like, pieces of paper?
+#define EMISSIVE_BLOCK_NONE 2
 
 /// The color matrix applied to binary emissive overlays. Should be solely dependent on alpha and not have RGB overlap with [EM_BLOCK_COLOR].
 #define EMISSIVE_COLOR list(0,0,0,0, 0,0,0,0, 0,0,0,0, 1,1,1,1, 0,0,0,0)

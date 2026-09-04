@@ -6,7 +6,7 @@
 	appearance_flags = APPEARANCE_UI | KEEP_TOGETHER | TILE_BOUND
 	plane = HUD_PLANE
 	layer = HUD_LAYER_STORAGE
-	icon = 'icons/screen/hud/common/storage.dmi'
+	icon = 'icons/screen/hud/styles/common/storage.dmi'
 
 /atom/movable/screen/storage/closer
 	name = "close"
@@ -85,6 +85,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/storage/item)
 
 /**
  * we are centered.
+ * * this includes the border, but not the padding.
  */
 /atom/movable/screen/storage/item/volumetric/proc/set_pixel_width(width)
 	overlays.len = 0

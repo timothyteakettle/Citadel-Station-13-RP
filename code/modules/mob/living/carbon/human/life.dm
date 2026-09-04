@@ -409,6 +409,9 @@
 /mob/living/carbon/human/handle_breath(datum/gas_mixture/breath)
 	if(status_flags & STATUS_GODMODE)
 		return
+	// don't breathe in nullspace
+	if(!get_turf(src))
+		return
 
 	if(suiciding)
 		failed_last_breath = 1
@@ -1096,11 +1099,6 @@
 				hydration_reduction *= mod.metabolism_percent
 		adjust_hydration(-hydration_reduction)
 
-	if(noisy == TRUE && nutrition < 250 && prob(10))
-		var/sound/growlsound = sound(get_sfx("hunger_sounds"))
-		var/growlmultiplier = 100 - (nutrition / 250 * 100)
-		playsound(src, growlsound, vol = growlmultiplier, vary = 1, falloff = 0.1, ignore_walls = TRUE, preference = /datum/game_preference_toggle/vore_sounds/digestion_noises)
-
 	// TODO: stomach and bloodstream organ.
 	if(!isSynthetic())
 		handle_trace_chems()
@@ -1758,13 +1756,10 @@
 
 	if(modifiers && modifiers.len)
 		for(var/datum/modifier/mod in modifiers)
-			if(isnull(modifier_set) && !isnull(mod.pulse_set_level))
+			if(isnull(mod.pulse_set_level))
+				continue
+			if(isnull(modifier_set) || mod.pulse_set_level > modifier_set)
 				modifier_set = round(mod.pulse_set_level)	// Should be a whole number, but let's not take chances.
-			else if(mod.pulse_set_level > modifier_set)
-				modifier_set = round(mod.pulse_set_level)
-
-			modifier_set = max(0, modifier_set)	// No setting to negatives.
-
 			if(mod.pulse_modifier)
 				modifier_shift += mod.pulse_modifier
 

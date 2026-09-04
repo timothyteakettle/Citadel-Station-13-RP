@@ -57,9 +57,13 @@
 	color = "#d1db77"
 
 /datum/reagent/chlorine/legacy_affect_blood(mob/living/carbon/M, alien, removed, datum/reagent_metabolism/metabolism)
+	if (alien == IS_SCORI)
+		return
 	M.take_random_targeted_damage(brute = 1*REM, brute = 0)
 
 /datum/reagent/chlorine/legacy_affect_touch(mob/living/carbon/M, alien, removed, datum/reagent_metabolism/metabolism)
+	if (alien == IS_SCORI)
+		return
 	M.take_random_targeted_damage(brute = 1*REM, brute = 0)
 
 /datum/reagent/copper
@@ -68,6 +72,10 @@
 	description = "A highly ductile metal."
 	taste_description = "pennies"
 	color = "#6E3B08"
+
+/datum/reagent/copper/legacy_affect_ingest(mob/living/carbon/M, alien, removed, datum/reagent_metabolism/metabolism)
+	if(alien == IS_SCORI)
+		M.add_chemical_effect(CE_BLOODRESTORE, 8 * removed)
 
 /datum/reagent/fluorine
 	name = "Fluorine"
@@ -108,8 +116,16 @@
 	color = "#353535"
 
 /datum/reagent/iron/legacy_affect_ingest(mob/living/carbon/M, alien, removed, datum/reagent_metabolism/metabolism)
-	if(alien != IS_DIONA)
+	if(alien != IS_DIONA && alien != IS_SCORI)
 		M.add_chemical_effect(CE_BLOODRESTORE, 8 * removed)
+
+/datum/reagent/lead
+	name = "Lead"
+	id = "lead"
+	description = "A particularly heavy metal."
+	taste_description = "metal"
+	reagent_state = REAGENT_SOLID
+	color = "#273956"
 
 /datum/reagent/lithium
 	name = "Lithium"

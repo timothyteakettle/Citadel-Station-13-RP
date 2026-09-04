@@ -85,7 +85,6 @@
 	ore_mapping = list(
 		/obj/item/stack/ore/lead = /obj/item/stack/material/lead,
         /obj/item/stack/ore/copper = /obj/item/stack/material/copper,
-		/obj/item/stack/ore/iron = /obj/item/stack/rods,
 		/obj/item/stack/ore/glass = /obj/item/stack/ore/slag
     )
 	insert_msg_override = list(
@@ -295,6 +294,24 @@
 				user.visible_message("<span class='notice'>[user] feeds \the [W] into \the [src].</span>","<span class='notice'>You reduce \the [W] using \the [src].</span>")
 				playsound(loc, 'sound/weapons/gun_flamethrower3.ogg', 50, 1)
 				beaker.reagents.add_reagent("ash", 10)
+
+	if(istype(I,/obj/item/siftershell))
+		if(!beaker)
+			return
+		else if(do_after(user, 10))
+			qdel(I)
+			user.visible_message("<span class='notice'>[user] feeds \the [I] into \the [src].</span>","<span class='notice'>You reduce \the [I] using \the [src].</span>")
+			playsound(loc, 'sound/weapons/gun_flamethrower3.ogg', 50, 1)
+			beaker.reagents.add_reagent("calcium", 10)
+
+	if(istype(I,/obj/item/elderstone))
+		if(!beaker)
+			return
+		else if(do_after(user, 10))
+			qdel(I)
+			user.visible_message("<span class='notice'>[user] feeds \the [I] into \the [src].</span>","<span class='notice'>You reduce \the [I] using \the [src].</span>")
+			playsound(loc, 'sound/weapons/gun_flamethrower3.ogg', 50, 1)
+			beaker.reagents.add_reagent("catalyst", 10)
 
 	src.updateUsrDialog()
 	return 0

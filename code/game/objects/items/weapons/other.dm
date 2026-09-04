@@ -170,19 +170,6 @@
 	icon_state = "crutch"
 	item_state = "crutch"
 
-/obj/item/disk
-	name = "disk"
-	icon = 'icons/obj/items.dmi'
-	drop_sound = 'sound/items/drop/disk.ogg'
-	pickup_sound =  'sound/items/pickup/disk.ogg'
-
-/obj/item/disk/nuclear
-	name = "nuclear authentication disk"
-	desc = "Better keep this safe."
-	icon_state = "nucleardisk"
-	item_state = "card-id"
-	w_class = WEIGHT_CLASS_SMALL
-
 /obj/item/caution
 	desc = "Caution! Wet Floor!"
 	name = "wet floor sign"
@@ -273,7 +260,7 @@
 	w_class = WEIGHT_CLASS_SMALL
 
 /obj/item/module
-	icon = 'icons/obj/module.dmi'
+	icon = 'icons/items/circuits.dmi'
 	icon_state = "std_module"
 	item_state = "std_mod"
 	w_class = WEIGHT_CLASS_SMALL
@@ -397,6 +384,13 @@
 	icon_state = "elderstone"
 	w_class = WEIGHT_CLASS_SMALL
 	catalogue_data = list(/datum/category_item/catalogue/anomalous/scorian_religion/elder_stone)
+
+/obj/item/siftershell
+	name = "sifter shell"
+	desc = "The hollowed out shell of a sand sifter. The process is universally fatal."
+	icon = 'icons/obj/lavaland.dmi'
+	icon_state = "shell"
+	w_class = WEIGHT_CLASS_SMALL
 
 /obj/item/condensedphlogiston
 	name = "condensed phlogiston"
